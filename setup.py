@@ -2,7 +2,7 @@ import setuptools
 
 
 setuptools.setup(
-    name="skypy",
+    name="skypy-api",
     url="https://github.com/FuchsCrafter/skypy",
     version="0.0.1",
     author="FuchsCrafter",
