@@ -2,8 +2,10 @@ import requests
 import json
 
 class skypy:
+
   def __init__(self):
     pass
+
 
 
   class bazaar:
@@ -17,8 +19,8 @@ class skypy:
     def fetchProduct(self, itemname):
       r = requests.get("https://api.hypixel.net/skyblock/bazaar")
       bazaarProducts = json.loads(r.text)
-      bazaarProducts2 = bazaarProducts["products"]
+      bazaarProducts = bazaarProducts["products"]
       try:
-        return bazaarProducts2[itemname]
+        return bazaarProducts[itemname]
       except:
         return False
