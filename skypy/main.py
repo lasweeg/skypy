@@ -1,3 +1,5 @@
+# skypy(skypy-api) by FuchsCrafter - https://github.com/FuchsCrafter/skypy
+
 import requests
 import json
 
