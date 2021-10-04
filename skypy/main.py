@@ -1,3 +1,5 @@
+# skypy(skypy-api) by FuchsCrafter - https://github.com/FuchsCrafter/skypy
+
 import requests
 import json
 
@@ -6,11 +8,19 @@ class skypy:
   def __init__(self, key):
     global apikey
     apikey = str(key)
-    try:
-      r = requests.get("https://api.hypixel.net/key?key="+ key)
+    r = requests.get("https://api.hypixel.net/key?key="+ key)
     returns = json.loads(r.text)
     if not returns["success"]:
       print("Invalid API Key! Please note that you cant use some modules now!")
+
+  def getNews(self):
+    """ Gets th latest SkyBlock news"""
+    r = requests.get("https://api.hypixel.net/skyblock/news?key=" + apikey)
+    returns = json.loads(r.text)
+    if not returns["success"]:
+      print("Failed! Make sure that you api key is correct!")
+    else:
+      return returns["items"]
 
   class bazaar:
     """ The bazaar class was made to get bazaar values from certain items. """
@@ -63,3 +73,9 @@ class skypy:
         print("Failed! Make sure, that you api key and the auction-id is correct!")
       else:
         return returns["auctions"]
+    def getAuctions(self):
+      """ Gets all active auctions. You dont need an API key for this. """
+      r = requests.get("https://api.hypixel.net/skyblock/auctions")
+      returns = json.loads(r.text)
+      return returns
+  
