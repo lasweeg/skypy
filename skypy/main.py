@@ -73,6 +73,7 @@ class skypy:
         print("Failed! Make sure, that you api key and the auction-id is correct!")
       else:
         return returns["auctions"]
+   
     def getAuctions(self):
       """ Gets all active auctions. You dont need an API key for this. """
       r = requests.get("https://api.hypixel.net/skyblock/auctions")
