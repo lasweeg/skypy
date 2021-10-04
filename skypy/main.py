@@ -1,6 +1,5 @@
 import requests
 import json
-import os, sys
 
 class skypy:
   """ The skypy class for the module. Uses a api key that you can find by running /api on mc.hypixel.net """
@@ -9,8 +8,6 @@ class skypy:
     apikey = str(key)
     try:
       r = requests.get("https://api.hypixel.net/key?key="+ key)
-    except:
-      sys.exit(0)
     returns = json.loads(r.text)
     if not returns["success"]:
       print("Invalid API Key! Please note that you cant use some modules now!")
@@ -41,7 +38,6 @@ class skypy:
 
     def getAuctionByPlayer(self, uuid):
       """ Gets the auction by a player uuid. """
-      # payload = {'key': apikey, 'player': uuid}
       r = requests.get("https://api.hypixel.net/skyblock/auction?key=" + apikey + "&player=" + uuid)
       returns = json.loads(r.text)
       if not returns["success"]:
