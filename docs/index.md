@@ -1,4 +1,6 @@
-# Skypy
+# Main Page
+
+## About
 Skypy is an well-documenteted framework to connect to the Hypixel SkyBlock-API via Python.
 
 ## Download
