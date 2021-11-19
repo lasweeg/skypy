@@ -30,7 +30,8 @@ class skypy:
     def fetchAllProducts(self):
       """ Fetches all products and returns them as a JSON string. """
       r = requests.get("https://api.hypixel.net/skyblock/bazaar")
-      return json.loads(r.text)
+      r = json.loads(r.text)
+      return r["products"]
 
     def fetchProduct(self, itemname):
       """ Fetches a specific product and returns his data as a JSON string. """
