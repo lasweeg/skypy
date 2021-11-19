@@ -79,5 +79,12 @@ class skypy:
       """ Gets all active auctions. You dont need an API key for this. """
       r = requests.get("https://api.hypixel.net/skyblock/auctions")
       returns = json.loads(r.text)
-      return returns
+      return returns["auctions"]
+
+    def getEndedAuctions(self):
+      """ Gets the latest ended auctions. It works also without any authorization."""
+      r = requests.get("https://api.hypixel.net/skyblock/auctions_ended")
+      returns = json.loads(r.text)
+      return returns["auctions"]
+
   
