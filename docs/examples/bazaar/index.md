@@ -23,5 +23,5 @@ bazaarapi = skypyapi.bazaar()
 This works with the `fetchAllProducts()`-Function. This will get the server response of `https://api.hypixel.net/skyblock/bazaar`and return them as JSON.
 
 ```python
-print(bazaarap.fetchAllProducts())
+print(bazaarapi.fetchAllProducts())
 ```
