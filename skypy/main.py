@@ -14,7 +14,7 @@ class skypy:
       print("Invalid API Key! Please note that you cant use some modules now!")
 
   def getNews(self):
-    """ Gets th latest SkyBlock news"""
+    """ Gets the latest SkyBlock news"""
     r = requests.get("https://api.hypixel.net/skyblock/news?key=" + apikey)
     returns = json.loads(r.text)
     if not returns["success"]:
@@ -54,7 +54,7 @@ class skypy:
       if not returns["success"]:
         print("Failed! Make sure, that you api key and the uuid is correct!")
       else:
-        return returns["auctions"]
+        return json.loads(returns["auctions"])
 
     def getAuctionByPlayerName(self, player):
       """ Uses the Mojang API to get the uuid of a player. """
@@ -73,18 +73,18 @@ class skypy:
       if not returns["success"]:
         print("Failed! Make sure, that you api key and the auction-id is correct!")
       else:
-        return returns["auctions"]
+        return json.loads(returns["auctions"])
    
     def getAuctions(self):
       """ Gets all active auctions. You dont need an API key for this. """
       r = requests.get("https://api.hypixel.net/skyblock/auctions")
       returns = json.loads(r.text)
-      return returns["auctions"]
+      return json.loads(returns["auctions"])
 
     def getEndedAuctions(self):
       """ Gets the latest ended auctions. It works also without any authorization."""
       r = requests.get("https://api.hypixel.net/skyblock/auctions_ended")
       returns = json.loads(r.text)
-      return returns["auctions"]
+      return json.loads(returns["auctions"])
 
   
