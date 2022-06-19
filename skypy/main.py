@@ -5,12 +5,12 @@ import json
 
 class skypy:
   """ The skypy class for the module. Uses a api key that you can find by running /api on mc.hypixel.net """
-  def __init__(self, key):
+  def __init__(self, key, silent=False):
     global apikey
     apikey = str(key)
     r = requests.get("https://api.hypixel.net/key?key="+ key)
     returns = json.loads(r.text)
-    if not returns["success"]:
+    if not returns["success"] and not silent:
       print("Invalid API Key! Please note that you cant use some modules now!")
 
   def getNews(self):
@@ -33,13 +33,17 @@ class skypy:
       r = json.loads(r.text)
       return r["products"]
 
-    def fetchProduct(self, itemname):
+    def fetchProduct(self, itemname, quickmode=False):
       """ Fetches a specific product and returns his data as a JSON string. """
       r = requests.get("https://api.hypixel.net/skyblock/bazaar")
       bazaarProducts = json.loads(r.text)
       bazaarProducts = bazaarProducts["products"]
       try:
-        return bazaarProducts[itemname]
+        if not quickmode:
+          return bazaarProducts[itemname]
+        else:
+          _ = bazaarProducts[itemname]
+          return _["quick_status"]
       except:
         return False
   class auction:
