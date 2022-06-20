@@ -1,16 +1,22 @@
 # skypy(skypy-api) by FuchsCrafter - https://github.com/FuchsCrafter/skypy
+# Also check out skypy-webui - https://github.com/FuchsCrafter/skypy-webui
 
 import requests
 import json
 
 class skypy:
   """ The skypy class for the module. Uses a api key that you can find by running /api on mc.hypixel.net """
-  def __init__(self, key):
+  def __init__(self, key="NO_KEY", no_api_key=False):
     global apikey
-    apikey = str(key)
-    r = requests.get("https://api.hypixel.net/key?key="+ key)
-    returns = json.loads(r.text)
-    if not returns["success"]:
+    if not no_api_key or key == "NO_KEY":
+      returns = False
+    else:
+      apikey = str(key)
+      r = requests.get("https://api.hypixel.net/key?key="+ key)
+      returns = json.loads(r.text)
+      returns = returns["success"]
+
+    if not returns and not no_api_key and key != "NO_KEY":
       print("Invalid API Key! Please note that you cant use some modules now!")
 
   def getNews(self):
@@ -33,13 +39,17 @@ class skypy:
       r = json.loads(r.text)
       return r["products"]
 
-    def fetchProduct(self, itemname):
-      """ Fetches a specific product and returns his data as a JSON string. """
+    def fetchProduct(self, itemname, quickmode=False):
+      """ Fetches a specific product and returns his data as a JSON string. Use Quick Mode for shortet but cleaner returns. Returns False if the product is not found. """
       r = requests.get("https://api.hypixel.net/skyblock/bazaar")
       bazaarProducts = json.loads(r.text)
       bazaarProducts = bazaarProducts["products"]
       try:
-        return bazaarProducts[itemname]
+        if not quickmode:
+          return bazaarProducts[itemname]
+        else:
+          _ = bazaarProducts[itemname]
+          return _["quick_status"]
       except:
         return False
   class auction:
@@ -86,5 +96,47 @@ class skypy:
       r = requests.get("https://api.hypixel.net/skyblock/auctions_ended")
       returns = json.loads(r.text)
       return json.loads(returns["auctions"])
+  class politics:
+    """ The politics class is there to get the current election results or the current mayor. """
+    def __init__(self):
+      pass
+    def getCurrentMayor(self, quickmode=False):
+      """ Gets the current mayor an his perks. """
+      r = requests.get("https://api.hypixel.net/resources/skyblock/election")
+      returns = json.loads(r.text)
 
-  
+      if quickmode:
+        returns = returns["mayor"]
+        name = returns["name"]
+        mkey = returns["key"]
+        _ = {"name": name,"key": mkey}
+        return _
+      else:
+        return returns["mayor"]
+
+    def getCurrentElection(self, quickmode=False, full=True):
+      """ Gets the current election results. Using Quickmode only gets the canidates list with all the child data."""
+      r = requests.get("https://api.hypixel.net/resources/skyblock/election")
+      returns = json.loads(r.text)
+      if not quickmode:
+        return returns["current"]
+      else:
+        _ = returns["current"]["candidates"]
+        returns = {}
+        for element in _:
+          if full:
+            returns[element["name"]] = {"name": element["name"],"key": element["key"], "votes": element["votes"], "perks": element["perks"]}
+          else:
+            returns[element["name"]] = {"name": element["name"],"key": element["key"], "votes": element["votes"]}
+        return returns
+
+    def getElectionResults(self):
+      """ Gets only the election votes. """
+      r = requests.get("https://api.hypixel.net/resources/skyblock/election")
+      returns = json.loads(r.text)
+      _ = returns["current"]["candidates"]
+      returns = {}
+      for element in _:
+        returns[element["name"]] = element["votes"]
+      return returns
+
