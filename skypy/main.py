@@ -5,10 +5,10 @@ import requests
 import json
 
 class skypy:
-  """ The skypy class for the module. Uses a api key that you can find by running /api on mc.hypixel.net """
-  def __init__(self, key="NO_KEY", no_api_key=False):
+  """ The main class for the module. Uses an api key that you can find by running /apinew on mc.hypixel.net """
+  def __init__(self, key="NO_KEY"):
     global apikey
-    if not no_api_key or key == "NO_KEY":
+    if key == "NO_KEY":
       returns = False
     else:
       apikey = str(key)
@@ -16,17 +16,44 @@ class skypy:
       returns = json.loads(r.text)
       returns = returns["success"]
 
-    if not returns and not no_api_key and key != "NO_KEY":
+    if not returns and key != "NO_KEY":
       print("Invalid API Key! Please note that you cant use some modules now!")
 
   def getNews(self):
-    """ Gets the latest SkyBlock news"""
+    """**Requires Authentication**\nGets the latest SkyBlock news. """
     r = requests.get("https://api.hypixel.net/skyblock/news?key=" + apikey)
     returns = json.loads(r.text)
     if not returns["success"]:
       print("Failed! Make sure that you api key is correct!")
     else:
       return returns["items"]
+
+  def getItem(self, itemname):
+    """ Gets a specific item and its childs (e.g. NPC sell price, category, name, etc.)"""
+    r = requests.get("https://api.hypixel.net/resources/skyblock/items")
+    r = json.loads(r.text)["items"]
+    try:
+      for element in r:
+        if element["id"] == itemname:
+          return element
+    except:
+      return
+
+  def getAllItems(self):
+    """ Gets all Items and returns them in a disctionary."""
+    r = requests.get("https://api.hypixel.net/resources/skyblock/items")
+    r = json.loads(r.text)["items"]
+    returns = {}
+    for element in r:
+      returns[element["id"]] = element
+    return returns
+
+  def getCurrentBingo(self):
+    return json.loads(requests.get("https://api.hypixel.net/resources/skyblock/bingo").text)["goals"]
+
+
+
+
 
   class bazaar:
     """ The bazaar class was made to get bazaar values from certain items. """
@@ -35,12 +62,11 @@ class skypy:
 
     def fetchAllProducts(self):
       """ Fetches all products and returns them as a JSON string. """
-      r = requests.get("https://api.hypixel.net/skyblock/bazaar")
-      r = json.loads(r.text)
-      return r["products"]
+      return json.loads(requests.get("https://api.hypixel.net/skyblock/bazaar").text)["products"]
+
 
     def fetchProduct(self, itemname, quickmode=False):
-      """ Fetches a specific product and returns his data as a JSON string. Use Quick Mode for shortet but cleaner returns. Returns False if the product is not found. """
+      """ Fetches a specific product and returns his data as a JSON string. Use Quick Mode for shorter but cleaner returns. Returns False if the product is not found. """
       r = requests.get("https://api.hypixel.net/skyblock/bazaar")
       bazaarProducts = json.loads(r.text)
       bazaarProducts = bazaarProducts["products"]
